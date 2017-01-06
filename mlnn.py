@@ -34,6 +34,7 @@ class neural_net(object):
         return act_op
 
     def fprop(self, X):
+        # forward prop
         input = X
         pre_act1 = X.dot(self.W1) + self.b1
         act1 = np.tanh(pre_act1)
@@ -64,6 +65,7 @@ class neural_net(object):
         return 1.0 / num_data * loss
 
     def bprop(self, X, y, reg_lambda, epsilon):
+        # back prop
         num_data = len(X)
         pre_act1, pre_act2, pre_act3, act1, act2, act3 = self.fprop(X)
         # error signal 4
