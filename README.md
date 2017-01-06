@@ -1,7 +1,7 @@
 Neural Network from scratch
 ===================
 
-#### IPython notebook illustrates experiments with a 4 layer network. 
+#### [IPython notebook](mlnn.ipynb) illustrates experiments with a 4 layer network. 
 Notebook setup-
 ```
 # Create and activate new virtual environment (optional)
