@@ -32,3 +32,6 @@ Please refer [mlnn.py](mlnn.py) for model code.
 * numpy
 * sklearn
 * matplolib 
+
+
+*Please feel free to contact me at ishank269[at]gmail[dot]com to report any issues or you can open an issue [here](https://github.com/ishank26/nn_from_scratch/issues). Fork or clone for your use :)*
