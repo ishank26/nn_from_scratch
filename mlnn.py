@@ -155,7 +155,7 @@ class neural_net(object):
             # make predictions for all grid points
             Z = self.predict(np.c_[xx.ravel(), yy.ravel()])
             Z = Z.reshape(xx.shape)
-            plt.gca().cla()  # get current axes and clear for plot new contour
+            plt.gca().cla()  # get current axes and clear for new plot
             plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral)
             plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Spectral)
             display.clear_output(wait=True)
