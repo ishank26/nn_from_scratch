@@ -25,7 +25,7 @@ class neural_net(object):
         self.b3 = np.zeros((1, output_dim))
 
     def softmax(self, input):
-        # generate probabilties
+        # Generate probabilties
         probs = np.exp(input) / np.sum(np.exp(input), axis=1, keepdims=True)
         return probs
 
@@ -34,7 +34,7 @@ class neural_net(object):
         return act_op
 
     def fprop(self, X):
-        # forward prop
+        # Forward prop
         input = X
         pre_act1 = X.dot(self.W1) + self.b1
         act1 = np.tanh(pre_act1)
@@ -46,7 +46,7 @@ class neural_net(object):
 
     def predict(self, X):
         pre_act1, pre_act2, pre_act3, act1, act2, act3 = self.fprop(X)
-        # get max prob. for class
+        # Get max prob. for class
         return np.argmax(act3, axis=1)
 
     def crossentropy_loss(self, X, y, reg_lambda):
@@ -54,9 +54,9 @@ class neural_net(object):
         pre_act1, pre_act2, pre_act3, act1, act2, act3 = self.fprop(
             X)  # get probs
 
-        # log probabilities for crossentropy
+        # Log probabilities for crossentropy
         logprob = -np.log(act3[range(num_data), y])
-        # summation of all log probabilites
+        # Summation of all log probabilites
         loss = np.sum(logprob)
 
         # L2 weight decay for regularization = lambda * sum(theta**2)
@@ -65,7 +65,7 @@ class neural_net(object):
         return 1.0 / num_data * loss
 
     def bprop(self, X, y, reg_lambda, epsilon):
-        # back prop
+        # Back prop
         num_data = len(X)
         pre_act1, pre_act2, pre_act3, act1, act2, act3 = self.fprop(X)
         # error signal 4
@@ -76,7 +76,7 @@ class neural_net(object):
         # error signal 2
         esg2 = esg3.dot(self.W2.T) * (1 - np.square(act1))  # δ2
 
-        # partial derivatives of params
+        # Partial derivatives of params
         dW3 = act2.T.dot(esg4)
         db3 = np.sum(esg4, axis=0, keepdims=True)
         dW2 = act1.T.dot(esg3)
@@ -102,14 +102,14 @@ class neural_net(object):
         return self.W3, self.b3, self.W2, self.b2, self.W1, self.b1
 
     def train(self, X, y, reg_lambda, epsilon, num_pass=25000, print_loss=True):
-        # train for each iteration
+        # Train for each iteration
         for i in xrange(0, num_pass):
             self.W3, self.b3, self.W2, self.b2, self.W1, self.b1 = self.bprop(
                 X, y, reg_lambda, epsilon)
             if print_loss and i % 1000 == 0:
                 print "Loss after iteration %i: %f" % (i, self.crossentropy_loss(X, y, reg_lambda))
 
-        # make params. dict.
+        # Make params. dict.
         weights = ["W1", "W2", "W3"]
         num_W = [self.W1, self.W3, self.W3]
         biases = ["b1", "b2", "b3"]
@@ -124,7 +124,7 @@ class neural_net(object):
         # Set min and max values and give it some padding
         x_min, x_max = X[:, 0].min() - 0.7, X[:, 0].max() + 0.7
         y_min, y_max = X[:, 1].min() - 0.7, X[:, 1].max() + 0.7
-        # space between grid points
+        # Space between grid points
         h = 0.005
         # Generate a grid of points with distance h between them
         xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
@@ -140,7 +140,7 @@ class neural_net(object):
         plt.show()
 
     def animate_preds(self, X, y, reg_lambda, epsilon, num_pass=35000):
-        # train neural network and animate the training procedure
+        # Train neural network and animate the training procedure
         i = 0
         plt.ion()
         plt.figure(figsize=(8, 6))
@@ -152,13 +152,14 @@ class neural_net(object):
             h = 0.005
             xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
                                  np.arange(y_min, y_max, h))
+            # make predictions for all grid points
             Z = self.predict(np.c_[xx.ravel(), yy.ravel()])
             Z = Z.reshape(xx.shape)
-            plt.gca().cla()
+            plt.gca().cla()  # get current axes and clear for plot new contour
             plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral)
             plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Spectral)
             display.clear_output(wait=True)
             display.display(plt.gcf())
-            # plt.draw()
+            # plt.draw() # not working in matplotlib
             i += 1
             time.sleep(0.8)
